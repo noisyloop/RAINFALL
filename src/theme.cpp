@@ -57,13 +57,31 @@ static void parse_file(const std::string& path, Colors& c) {
     }
 }
 
+// Omarchy's current-theme directory. Current Omarchy keeps it under the XDG state dir
+// (~/.local/state/omarchy/current/theme/, which alacritty.toml itself imports from); older
+// layouts used ~/.config/omarchy/current/theme/. Return the first candidate that has a theme
+// file we can read, so RAINFALL picks up the live colours on both.
+static std::string theme_dir(const char* home) {
+    std::string state;
+    if (const char* xdg = std::getenv("XDG_STATE_HOME"); xdg && *xdg) state = xdg;
+    else state = std::string(home) + "/.local/state";
+    const std::string candidates[] = {
+        state + "/omarchy/current/theme/",
+        std::string(home) + "/.config/omarchy/current/theme/",
+    };
+    for (const std::string& dir : candidates)
+        for (const char* f : {"alacritty.toml", "colors.toml", "ghostty.conf", "kitty.conf"})
+            if (std::ifstream(dir + f).good()) return dir;
+    return candidates[0];  // nothing found; parsing it yields no colours -> classic fallback
+}
+
 Theme load_theme(bool classic) {
     Theme t{{0, 255, 70}, {235, 255, 235}, {255, 40, 40}, {120, 255, 160}, {150, 230, 150},
             false, 16.f};
     const char* home = std::getenv("HOME");
     if (classic || !home) return t;
 
-    std::string dir = std::string(home) + "/.config/omarchy/current/theme/";
+    std::string dir = theme_dir(home);
     Colors c;
     for (const char* f : {"alacritty.toml", "colors.toml", "ghostty.conf", "kitty.conf"})
         parse_file(dir + f, c);
