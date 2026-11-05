@@ -53,8 +53,10 @@ ramping up.
 
 ## Theming
 
-On launch RAINFALL reads `~/.config/omarchy/current/theme/` (`alacritty.toml`,
-falling back to `colors.toml`, `ghostty.conf` or `kitty.conf`):
+On launch RAINFALL reads Omarchy's current-theme directory
+(`~/.local/state/omarchy/current/theme/`, honouring `XDG_STATE_HOME`; older
+installs' `~/.config/omarchy/current/theme/` still work as a fallback), using
+`alacritty.toml`, then `colors.toml`, `ghostty.conf` or `kitty.conf`:
 
 - rain = theme green (or `accent`)
 - corrupt = theme red
