@@ -6,6 +6,8 @@ across the columns in your current Omarchy theme colours. Catch the white-hot
 glyphs, dodge the red corrupt ones, and chain combos to set off a screen-wide
 colour pulse.
 
+![RAINFALL in play: katakana rain in the current Omarchy theme, with the ship and HUD](docs/screenshot.png)
+
 - One small C++17 binary; the only dependency is `ncursesw`
 - 30 FPS at a few % CPU. No network, no login, no telemetry
 - Only writes its high score, to `~/.local/share/rainfall/highscore`
